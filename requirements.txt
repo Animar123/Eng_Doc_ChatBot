@@ -1,2 +1,4 @@
 streamlit
-openai
+langchain-chroma
+langchain-core
+langchain-ollama

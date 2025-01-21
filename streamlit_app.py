@@ -1,6 +1,4 @@
 import streamlit as st
-from openai import OpenAI
-import random
 import time
 
 # Show title and description.
@@ -17,14 +15,9 @@ st.write(
 # via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
 
 # Streamed response emulator
-def response_generator():
-    response = random.choice(
-        [
-            "Hello there! How can I assist you today?",
-            "Hi, human! Is there anything I can help you with?",
-            "Do you need help?",
-        ]
-    )
+def response_generator(question):
+    response = chain.invoke(question)
+    
     for word in response.split():
         yield word + " "
         time.sleep(0.05)
@@ -48,6 +41,7 @@ if prompt := st.chat_input("What is up?"):
 
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        response = st.write_stream(response_generator())
+        question = prompt
+        response = st.write_stream(response_generator(question))
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
